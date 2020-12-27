@@ -62,6 +62,12 @@ client.giveawaysManager.on('giveawayReactionRemoved', (giveaway, member, reactio
     log.info(`${member.user.tag} unreact to giveaway #${giveaway.messageID} (${reaction.emoji.name})`);
 });
 
+client.giveawaysManager.on('giveawayEnded', (giveaway, winners) => {
+    log.info(
+        `Giveaway #${giveaway.messageID} ended! Winners: ${winners.map(member => member.user.username).join(', ')}`
+    );
+});
+
 fs.readdir(path.resolve(__dirname, 'events'), (_err, files) => {
     files.forEach(file => {
         if (!file.endsWith('.js')) return;
