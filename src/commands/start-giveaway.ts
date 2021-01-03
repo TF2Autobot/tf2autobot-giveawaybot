@@ -42,6 +42,11 @@ exports.run = async (client: ClientGiveaway, message: Message, args: string[]) =
         return message.channel.send('❌ You have to specify a valid prize!');
     }
 
+    if (giveawayPrize.length > 256) {
+        log.debug(`❌ ${message.author.toString()} specify a prize with more than 256 characters`);
+        return message.channel.send('❌ Prize(s) field should not exceed 256 characters!');
+    }
+
     // Start the giveaway
     void client.giveawaysManager.start(giveawayChannel, {
         // The giveaway duration
