@@ -7,7 +7,7 @@
 [![GitHub issues](https://img.shields.io/github/issues/TF2Autobot/tf2autobot-giveawaybot)](https://github.com/TF2Autobot/tf2autobot-giveawaybot/issues)
 [![GitHub forks](https://img.shields.io/github/forks/TF2Autobot/tf2autobot-giveawaybot)](https://github.com/TF2Autobot/tf2autobot-giveawaybot/network/members)
 [![GitHub stars](https://img.shields.io/github/stars/TF2Autobot/tf2autobot-giveawaybot)](https://github.com/TF2Autobot/tf2autobot-giveawaybot/stargazers)
-[![Discord](https://img.shields.io/discord/664971400678998016.svg)](https://discord.gg/ZrVT7mc)
+[![Discord](https://img.shields.io/discord/664971400678998016.svg)](https://discord.gg/D2GNnp7tv8)
 ![License](https://img.shields.io/github/license/TF2Autobot/tf2autobot-giveawaybot)
 
 ## Installation
@@ -43,7 +43,7 @@ sudo apt-get install -y nodejs
 
 ## Join our Discord server!
 
-Join the [TF2Autobot Discord server](https://discord.gg/ZrVT7mc) and head over to [`#🆚roles`](https://discordapp.com/channels/664971400678998016/719391430669500447/771188962550611988) channel and react to the first message to get notified whenever an update has been released!
+Join the [TF2Autobot Discord server](https://discord.gg/D2GNnp7tv8) and head over to [`#🆚roles`](https://discordapp.com/channels/664971400678998016/719391430669500447/771188962550611988) channel and react to the first message to get notified whenever an update has been released!
 
 <div align="center"><img src="https://user-images.githubusercontent.com/47635037/88795539-c8c65580-d1d2-11ea-993e-4161083b3e36.PNG" alt="update-noti" style="display:block;margin-left:auto;margin-right:auto;width:400px;height:250px;"></div>
 
