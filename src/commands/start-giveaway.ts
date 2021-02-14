@@ -17,7 +17,7 @@ exports.run = async (client: ClientGiveaway, message: Message, args: string[]) =
 
     const inputDuration = ms(giveawayDuration);
     const minTime = ms(process.env.MINIMUM_TIME) || 15 * 60 * 1000;
-    const maxTime = ms(process.env.MAXIMUM_TIME) || 24 * 60 * 60 * 1000;
+    const maxTime = ms(process.env.MAXIMUM_TIME) || 23 * 60 * 60 * 1000;
 
     if (inputDuration < minTime || inputDuration > maxTime) {
         log.debug(`❌ ${message.author.toString()} did not specify a valid duration`);
@@ -32,6 +32,11 @@ exports.run = async (client: ClientGiveaway, message: Message, args: string[]) =
     if (isNaN(+giveawayNumberWinners) || parseInt(giveawayNumberWinners) <= 0) {
         log.debug(`❌ ${message.author.toString()} did not specify a valid number of winners`);
         return message.channel.send('❌ You have to specify a valid number of winners!');
+    }
+
+    if (parseInt(giveawayNumberWinners) > 10) {
+        log.debug(`❌ ${message.author.toString()} specified number of winners of more than 10`);
+        return message.channel.send('❌ The number of winners should not exceed 10!');
     }
 
     // Giveaway prize
