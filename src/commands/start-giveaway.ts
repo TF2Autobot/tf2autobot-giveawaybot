@@ -34,6 +34,11 @@ exports.run = async (client: ClientGiveaway, message: Message, args: string[]) =
         return message.channel.send('❌ You have to specify a valid number of winners!');
     }
 
+    if (parseInt(giveawayNumberWinners) > 10) {
+        log.debug(`❌ ${message.author.toString()} specified number of winners of more than 10`);
+        return message.channel.send('❌ The number of winners should not exceed 10!');
+    }
+
     // Giveaway prize
     const giveawayPrize = args.slice(2).join(' ');
     // If no prize is specified
