@@ -17,7 +17,7 @@ exports.run = async (client: ClientGiveaway, message: Message, args: string[]) =
 
     const inputDuration = ms(giveawayDuration);
     const minTime = ms(process.env.MINIMUM_TIME) || 15 * 60 * 1000;
-    const maxTime = ms(process.env.MAXIMUM_TIME) || 24 * 60 * 60 * 1000;
+    const maxTime = ms(process.env.MAXIMUM_TIME) || 23 * 60 * 60 * 1000;
 
     if (inputDuration < minTime || inputDuration > maxTime) {
         log.debug(`❌ ${message.author.toString()} did not specify a valid duration`);
