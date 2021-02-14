@@ -13,7 +13,7 @@
   "license": "MIT",
   "dependencies": {
     "death": "^1.1.0",
-    "discord-giveaways": "^4.4.2",
+    "discord-giveaways": "^4.4.3",
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
     "ms": "^2.1.3",
