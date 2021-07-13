@@ -1,6 +1,6 @@
 {
   "name": "tf2autobot-giveawaybot",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "Custom giveawayBot for TF2Autobot (or other) Discord server",
   "main": "index.js",
   "scripts": {
