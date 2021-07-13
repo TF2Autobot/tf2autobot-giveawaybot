@@ -6,6 +6,7 @@ import log from '../lib/logger';
 
 const winMessage = process.env.GIVEAWAY_WIN_MESSAGE;
 const giveawayBonusEntryRoleIDs = JSON.parse(process.env.GIVEAWAY_BONUS_ENTRY_ROLE_IDS) as string[];
+const giveawayOnlyJoinableRoleIDs = JSON.parse(process.env.GIVEAWAY_ONLY_JOINABLE_ROLE_IDS) as string[];
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 exports.run = async (client: ClientGiveaway, message: Message, args: string[]) => {
@@ -99,6 +100,12 @@ exports.run = async (client: ClientGiveaway, message: Message, args: string[]) =
                 cumulative: false
             }
         ];
+    }
+
+    if (giveawayOnlyJoinableRoleIDs.length > 0) {
+        // Only members with specified role(s) are able to win the giveaway
+        giveawayOptions.exemptMembers = member =>
+            !member.roles.cache.some(r => giveawayOnlyJoinableRoleIDs.includes(r.id));
     }
 
     void client.giveawaysManager.start(giveawayChannel, giveawayOptions);

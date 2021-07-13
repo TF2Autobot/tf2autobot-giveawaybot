@@ -35,7 +35,7 @@ dotenv.config({ path: path.join(__dirname, '../.env') });
 
 import { GiveawaysManager } from 'discord-giveaways';
 
-import { Client, Collection } from 'discord.js';
+import { Client, Collection, GuildMember, MessageReaction } from 'discord.js';
 const client = new Client() as ClientGiveaway;
 
 import ms from 'ms';
@@ -54,9 +54,57 @@ client.giveawaysManager = new GiveawaysManager(client, {
 import log, { init } from './lib/logger';
 init(genPaths());
 
+const giveawayOnlyJoinableRoleIDs = JSON.parse(process.env.GIVEAWAY_ONLY_JOINABLE_ROLE_IDS) as string[];
+const referenceMessageURL = process.env.GIVEAWAY_INFO_ABOUT_JOINABLE_MESSAGE_URL;
+
 client.giveawaysManager.on('giveawayReactionAdded', (giveaway, member, reaction) => {
     log.info(`${member.user.tag} entered giveaway #${giveaway.messageID} (${reaction.emoji.name})`);
+
+    if (!member.roles.cache.some(role => giveawayOnlyJoinableRoleIDs.includes(role.id))) {
+        reaction.users
+            .remove(member.user)
+            .catch(err => {
+                log.error('Error removing reaction:', err);
+                log.debug('Retrying in 5 seconds...');
+                retryRemoveReaction(member, reaction);
+            })
+            .finally(() => {
+                member
+                    .send(`You must have specified role to participate in the giveaway: Read ${referenceMessageURL}`)
+                    .catch(err => {
+                        log.error('Error sending message:', err);
+                        log.debug('Retrying in 5 seconds...');
+                        retrySendMessage(member);
+                    });
+            });
+    }
 });
+
+function retryRemoveReaction(member: GuildMember, reaction: MessageReaction): void {
+    void promiseDelay(5 * 1000).then(() => {
+        void reaction.users.remove(member.user).catch(err => {
+            log.error('Error removing reaction:', err);
+            log.debug('Retrying in 5 seconds...');
+            retryRemoveReaction(member, reaction);
+        });
+    });
+}
+
+function retrySendMessage(member: GuildMember): void {
+    void promiseDelay(5 * 1000).then(() => {
+        void member
+            .send(`You must have specified role to participate in the giveaway: Read ${referenceMessageURL}`)
+            .catch(err => {
+                log.error('Error sending message:', err);
+                log.debug('Retrying in 5 seconds...');
+                retrySendMessage(member);
+            });
+    });
+}
+
+function promiseDelay(ms: number): Promise<void> {
+    return new Promise(resolve => setTimeout(() => resolve(), ms));
+}
 
 client.giveawaysManager.on('giveawayReactionRemoved', (giveaway, member, reaction) => {
     log.info(`${member.user.tag} unreact to giveaway #${giveaway.messageID} (${reaction.emoji.name})`);
