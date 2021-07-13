@@ -61,21 +61,18 @@ client.giveawaysManager.on('giveawayReactionAdded', (giveaway, member, reaction)
     log.info(`${member.user.tag} entered giveaway #${giveaway.messageID} (${reaction.emoji.name})`);
 
     if (!member.roles.cache.some(role => giveawayOnlyJoinableRoleIDs.includes(role.id))) {
-        reaction.users
-            .remove(member.user)
+        reaction.users.remove(member.user).catch(err => {
+            log.error('Error removing reaction:', err);
+            log.debug('Retrying in 5 seconds...');
+            retryRemoveReaction(member, reaction);
+        });
+
+        member
+            .send(`You must have specified role to participate in the giveaway: Read ${referenceMessageURL}`)
             .catch(err => {
-                log.error('Error removing reaction:', err);
+                log.error('Error sending message:', err);
                 log.debug('Retrying in 5 seconds...');
-                retryRemoveReaction(member, reaction);
-            })
-            .finally(() => {
-                member
-                    .send(`You must have specified role to participate in the giveaway: Read ${referenceMessageURL}`)
-                    .catch(err => {
-                        log.error('Error sending message:', err);
-                        log.debug('Retrying in 5 seconds...');
-                        retrySendMessage(member);
-                    });
+                retrySendMessage(member);
             });
     }
 });
