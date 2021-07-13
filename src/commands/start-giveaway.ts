@@ -3,6 +3,8 @@ import { Message, TextChannel } from 'discord.js';
 import ms from 'ms';
 import log from '../lib/logger';
 
+const winMessage = process.env.GIVEAWAY_WIN_MESSAGE;
+
 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 exports.run = async (client: ClientGiveaway, message: Message, args: string[]) => {
     // Giveaway channel
@@ -71,7 +73,7 @@ exports.run = async (client: ClientGiveaway, message: Message, args: string[]) =
                 '🎉🎉 **GIVEAWAY ENDED** 🎉🎉',
             timeRemaining: 'Time remaining: **{duration}**!',
             inviteToParticipate: 'React with 🎉 to participate!',
-            winMessage: 'Congratulations, {winners}! You won **{prize}**!\n{messageURL}',
+            winMessage: winMessage ? winMessage : 'Congratulations, {winners}! You won **{prize}**!\n{messageURL}',
             embedFooter: 'Giveaways',
             noWinner: 'Giveaway cancelled, no valid participations.',
             hostedBy: 'Hosted by: {user}',
