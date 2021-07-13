@@ -1,9 +1,11 @@
 import { ClientGiveaway } from '../app';
 import { Message, TextChannel } from 'discord.js';
+import { GiveawayStartOptions } from 'discord-giveaways';
 import ms from 'ms';
 import log from '../lib/logger';
 
 const winMessage = process.env.GIVEAWAY_WIN_MESSAGE;
+const giveawayBonusEntryRoleIDs = JSON.parse(process.env.GIVEAWAY_BONUS_ENTRY_ROLE_IDS) as string[];
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 exports.run = async (client: ClientGiveaway, message: Message, args: string[]) => {
@@ -55,7 +57,7 @@ exports.run = async (client: ClientGiveaway, message: Message, args: string[]) =
     }
 
     // Start the giveaway
-    void client.giveawaysManager.start(giveawayChannel, {
+    const giveawayOptions: GiveawayStartOptions = {
         // The giveaway duration
         time: inputDuration as number,
         // The giveaway prize
@@ -87,7 +89,19 @@ exports.run = async (client: ClientGiveaway, message: Message, args: string[]) =
                 pluralS: false // Not needed, because units end with a S so it will automatically removed if the unit value is lower than 2.. apparently the node extension likes it tho so idrc
             }
         }
-    });
+    };
+
+    if (giveawayBonusEntryRoleIDs.length > 0) {
+        giveawayOptions.bonusEntries = [
+            // Members with specified role(s) will get 2 bonus entries
+            {
+                bonus: member => (member.roles.cache.some(r => giveawayBonusEntryRoleIDs.includes(r.id)) ? 2 : null),
+                cumulative: false
+            }
+        ];
+    }
+
+    void client.giveawaysManager.start(giveawayChannel, giveawayOptions);
 
     log.debug(`✅ ${message.author.toString()} started a giveaway in ${giveawayChannel.toString()}`);
     void message.channel.send(`Giveaway started in ${giveawayChannel.toString()}!`);
