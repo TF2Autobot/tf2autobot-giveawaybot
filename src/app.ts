@@ -71,8 +71,10 @@ client.giveawaysManager.on('giveawayReactionAdded', (giveaway, member, reaction)
             .send(`You must have specified role to participate in the giveaway: Read ${referenceMessageURL}`)
             .catch(err => {
                 log.error('Error sending message:', err);
-                log.debug('Retrying in 5 seconds...');
-                retrySendMessage(member);
+                if (err.httpStatus !== 403 && err.code !== 50007) {
+                    log.debug('Retrying in 5 seconds...');
+                    retrySendMessage(member);
+                }
             });
     }
 });
@@ -93,8 +95,10 @@ function retrySendMessage(member: GuildMember): void {
             .send(`You must have specified role to participate in the giveaway: Read ${referenceMessageURL}`)
             .catch(err => {
                 log.error('Error sending message:', err);
-                log.debug('Retrying in 5 seconds...');
-                retrySendMessage(member);
+                if (err.httpStatus !== 403 && err.code !== 50007) {
+                    log.debug('Retrying in 5 seconds...');
+                    retrySendMessage(member);
+                }
             });
     });
 }
